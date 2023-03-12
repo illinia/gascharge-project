@@ -13,10 +13,6 @@ repositories {
 }
 
 subprojects {
-    task buildAll(type: GradleBuild) {
-        tasks = ['clean', 'build']
-
-    }
     task publishAllToMavenLocal(type: GradleBuild) {
         tasks = ['build', 'publishToMavenLocal']
         properties["dev"] = true
