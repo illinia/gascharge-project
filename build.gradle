@@ -1,0 +1,28 @@
+
+plugins {
+    id 'groovy-gradle-plugin'
+    id 'maven-publish'
+    id 'java-library'
+}
+
+group = 'com.gascharge.taemin'
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+subprojects {
+    task buildAll(type: GradleBuild) {
+        tasks = ['clean', 'build']
+
+    }
+    task publishAllToMavenLocal(type: GradleBuild) {
+        tasks = ['build', 'publishToMavenLocal']
+        properties["dev"] = true
+    }
+    task publishAllToMaven(type: GradleBuild) {
+        tasks = ['build', 'publish']
+        properties["pro"] = true
+    }
+}

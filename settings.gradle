@@ -1,0 +1,43 @@
+rootProject.setName 'gascharge'
+
+def includeProject(String moduleName, String moduleType) {
+    def moduleFullName = "gascharge-${moduleType}-${moduleName}"
+    include moduleFullName
+    project(":${moduleFullName}").projectDir = file("gascharge-${moduleType}/${moduleFullName}")
+}
+
+def includeApp(String moduleName) {
+    includeProject(moduleName, 'app')
+}
+
+def includeService(String moduleName) {
+    includeProject(moduleName, 'service')
+}
+
+def includeModule(String moduleName) {
+    includeProject(moduleName, 'module')
+}
+
+def includeCommon(String moduleName) {
+    includeProject(moduleName, 'common')
+}
+
+def includeDomain(String moduleName) {
+    includeProject(moduleName, 'domain')
+}
+
+includeApp 'reservation'
+includeApp 'batch'
+
+includeService 'reservation'
+includeService 'token'
+
+includeDomain 'reservation'
+includeDomain 'token'
+
+includeModule 'redis'
+includeModule 'jpa'
+includeModule 'security'
+includeModule 'yml'
+
+includeCommon 'common'
