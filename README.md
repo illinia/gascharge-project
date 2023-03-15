@@ -5,7 +5,7 @@
 
 ### docker run jenkins
 ```shell
-docker run -itd --name gascharge-jenkins-server -p 8080:8080 -v /Users/taemin/docker/jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -e TZ=Asia/Seoul -u root jenkins/jenkins:jdk17
+docker run -itd --name gascharge-jenkins-server -p 8080:8080 -v /Users/taemin/docker/jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v /Users/taemin/.m2/repository:/root/.m2/repository -e TZ=Asia/Seoul -u root jenkins/jenkins:jdk17
 ```
 
 ### 젠킨스 추가
