@@ -1,5 +1,5 @@
 ### 토큰 값 획득
-GET {{local-reservation-app-url}}/token
+GET {{url}}/token
 
 > {%
 client.test("Validate", function () {
@@ -12,21 +12,21 @@ client.global.set("admin_jwt_token", response.body[1].jwtToken);
 %}
 
 ### 1. 충전소 페이징, 정렬 검색
-GET {{local-reservation-app-url}}/charge?name=test
+GET {{url}}/charge?name=test
 
 > {%
  client.assert(response.status === 200, "status is not 200")
  %}
 
 ### 2. getChargeByChargePlaceId
-GET {{local-reservation-app-url}}/charge/testId
+GET {{url}}/charge/testId
 
 > {%
     client.assert(response.status === 200, "status is not 200")
 %}
 
 ### 3. addCharge
-POST {{local-reservation-app-url}}/charge
+POST {{url}}/charge
 Content-Type: application/json
 Authorization: {{admin_jwt_token}}
 
@@ -34,7 +34,8 @@ Authorization: {{admin_jwt_token}}
   "chargePlaceId": "createTestChargePlaceId",
   "name": "createTestName",
   "totalCount": 10,
-  "currentCount": 20
+  "currentCount": 20,
+  "chargeMembership": "MEMBERSHIP"
 }
 
 > {%
@@ -42,7 +43,7 @@ Authorization: {{admin_jwt_token}}
 %}
 
 ### 4. updateCharge
-PATCH {{local-reservation-app-url}}/charge/createTestChargePlaceId
+PATCH {{url}}/charge/createTestChargePlaceId
 Content-Type: application/json
 Authorization: {{admin_jwt_token}}
 
@@ -57,7 +58,7 @@ Authorization: {{admin_jwt_token}}
 %}
 
 ### 5. deleteCharge
-DELETE {{local-reservation-app-url}}/charge/createTestChargePlaceId
+DELETE {{url}}/charge/createTestChargePlaceId
 Content-Type: application/json
 Authorization: {{admin_jwt_token}}
 

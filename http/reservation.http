@@ -1,5 +1,5 @@
 ### 0. 토큰 값 획득
-GET {{local-reservation-app-url}}/token
+GET {{url}}/token
 
 > {%
     client.test("Validate", function () {
@@ -13,7 +13,7 @@ GET {{local-reservation-app-url}}/token
 
 
 ### 1. reserve
-POST {{local-reservation-app-url}}/reservation
+POST {{url}}/reservation
 Content-Type: application/json
 Authorization: {{admin_jwt_token}}
 
@@ -24,18 +24,18 @@ Authorization: {{admin_jwt_token}}
 
 > {%
  client.assert(response.status === 201, "status is not 201")
- client.assert(response.body.reservationId != null, "reservationId is null")
+ client.assert(response.body.reservationValidationId != null, "reservationValidationId is null")
 
- client.global.set('reservedId', response.body.reservationId)
+ client.global.set('reservationValidationId', response.body.reservationValidationId)
  %}
 
 ### 2. updateSelfReservationTime
-PATCH {{local-reservation-app-url}}/reservation
+PATCH {{url}}/reservation
 Content-Type: application/json
 Authorization: {{admin_jwt_token}}
 
 {
-  "reservationValidationId": "{{reservedId}}",
+  "reservationValidationId": "{{reservationValidationId}}",
   "email": "admin@test.com",
   "updateTime": "2024-10-13T20:00:00"
 }
@@ -45,7 +45,7 @@ Authorization: {{admin_jwt_token}}
  %}
 
 ### 3. forceUpdate
-PATCH {{local-reservation-app-url}}/reservation/{{reservedId}}
+PATCH {{url}}/reservation/{{reservationValidationId}}
 Content-Type: application/json
 Authorization: {{admin_jwt_token}}
 
@@ -61,7 +61,7 @@ Authorization: {{admin_jwt_token}}
  %}
 
 ### 4. getById
-GET {{local-reservation-app-url}}/reservation/{{reservedId}}
+GET {{url}}/reservation/{{reservationValidationId}}
 Authorization: {{admin_jwt_token}}
 
 > {%
@@ -71,7 +71,7 @@ Authorization: {{admin_jwt_token}}
 %}
 
 ### 5. getList
-GET {{local-reservation-app-url}}/reservation?email=admin@test.com
+GET {{url}}/reservation?email=admin@test.com
 Authorization: {{admin_jwt_token}}
 
 > {%
@@ -82,7 +82,7 @@ client.assert(response.body.content.length > 0, 'content is not existing')
 
 
 ### cancel
-POST {{local-reservation-app-url}}/reservation/cancel?email=admin@test.com&reservationValidationId={{reservedId}}
+POST {{url}}/reservation/cancel?email=admin@test.com&reservationValidationId={{reservationValidationId}}
 Authorization: {{admin_jwt_token}}
 
 > {%
