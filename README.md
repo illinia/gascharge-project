@@ -1,7 +1,7 @@
 ### gascharge-app-multimodule-project
 gascharge 멀티모듈 포트폴리오 최상위 프로젝트
 
-![](/Users/taemin/Downloads/포트폴리오-다이어그램.drawio.png)
+![포트폴리오-다이어그램 drawio](https://user-images.githubusercontent.com/67290425/225570270-b9cb02d5-9837-4aca-853f-f4b44c0ae851.png)
 
 * 서브 프로젝트들 빌드, 로컬 메이븐 레포 배포, 공개 메이븐 레포 배포 테스트 테스크
 * 인텔리제이 http 테스트 설정 파일
