@@ -1,23 +1,25 @@
-### 프로젝트 개편에 따른 수정, 개선 필요 사항
-모든 프로젝트가 젠킨스에서 잘 작동하고 로컬에서도 잘 작동하면 전체 README 파일 수정 필요.
+### gascharge-app-multimodule-project
+gascharge 멀티모듈 포트폴리오 최상위 프로젝트
 
-서브 프로젝트를 깃에서 풀해서 가져오는 그래들 코드 작성 필요.
+* 서브 프로젝트들 빌드, 로컬 메이븐 레포 배포, 공개 메이븐 레포 배포 테스트 테스크
+* 인텔리제이 http 테스트 설정 파일
 
 ### docker run jenkins
 ```shell
 docker run -itd --name gascharge-jenkins-server -p 8080:8080 -v /Users/taemin/docker/jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v /Users/taemin/.m2/repository:/root/.m2/repository -e TZ=Asia/Seoul -u root jenkins/jenkins:jdk17
 ```
 
-### 젠킨스 추가
-https://www.jenkins.io/doc/book/installing/macos/
-
+### docker run mysql
 ```shell
-brew install jenkins-lts
-brew services start jenkins-lts
-cat /Users/taemin/.jenkins/secrets/initialAdminPassword
+docker run --name mysql-local -e MYSQL_ROOT_PASSWORD=1212 -d -p 13307:3306 mysql:8.0.32
 ```
 
-## 젠킨스 사용
+### docker run redis
+```shell
+docker run --name redis-local -d -p 6379:6379 redis:6.2-alpine
+```
+
+## 젠킨스 공부
 ### 자격 증명 사용
 * secret text : API 토큰과 같은 토큰(깃헙 개인 엑세스 토큰)
 * 사용자 이름, 암호 : 별도의 구성 요소 또는 콜론으로 구분된 형식의 문자열
@@ -32,26 +34,19 @@ Jenkins 관리 -> 자격 증명 관리 -> Jenkins 범위에서 Jenkins store 클
 * 필요한 값들 입력
 * credential 식별자 id 가 입력되면 바꾸지 못함
 
-### 이름으로 다른 프로젝트 참조
-#### 동일한 이름을 가진 여러 프로젝트 간의 구별
-Folders Plugin 사용중이고 서로 다른 폴더에 동일한 이름을 가진 여러 프로젝트가 있을 때
-Unix 파일 시스템 경로와 유사한 경로를 사용하여 프로젝트를 구분할 수 있다.
-* 절대 경로 : Jenkins 인스턴스 루트에 있는 프로젝트를 참조하려면 다음을 수행한다.
-  * /myproject
-  * /myfolder/myproject
-* 상대 경로 
-  * 같은 경로에 있다면 anotherproject 처럼 참조
-  * 상위 폴더를 찾을 시 ../someproject 처럼 참조
-  * ../../그 프로젝트
-
-
+___
+2022년 11월 까지 작업 내역
+___
 # 충전소 예약 플랫폼 백엔드
 ### 프론트로 참여했던 프로젝트의 백엔드를 구현한 충전소 예약 플랫폼입니다.
 
-* 스웨거 페이지
-  * http://ec2-43-201-91-96.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui.html
-* 소셜 로그인 페이지(해당 페이지는 다른 분이 구현할 것을 수정한 것 입니다.)
-  * http://ec2-43-201-91-96.ap-northeast-2.compute.amazonaws.com
+~~스웨거 페이지~~
+
+~~http://ec2-43-201-91-96.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui.html~~
+
+~~소셜 로그인 페이지(해당 페이지는 다른 분이 구현할 것을 수정한 것 입니다.)~~
+
+~~http://ec2-43-201-91-96.ap-northeast-2.compute.amazonaws.com~~
 
 ### 코드 설명 요약
 * 스프링 시큐리티 src/main/java/com/portfolio/gascharge/config/security/SecurityConfig.java
@@ -70,8 +65,6 @@ Unix 파일 시스템 경로와 유사한 경로를 사용하여 프로젝트를
   2. 스프링 validation 사용하여 컨트롤러에서 유효성 검사
   3. @RestControllerAdvice 사용하여 전역 예외 핸들러 구현
 * 컨트롤러, 서비스, 레포지토리 유닛 테스트 추가
-  
-### 0.2
 ___
 #### 0.2.2 내역 (22 Oct 2022)
 1. 컨트롤러, 서비스, 레포지토리 유닛 테스트 추가
