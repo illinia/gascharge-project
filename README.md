@@ -18,6 +18,15 @@ gascharge 멀티모듈 포트폴리오 최상위 프로젝트
 * 서브 프로젝트들 빌드, 로컬 메이븐 레포 배포, 공개 메이븐 레포 배포 테스트 테스크
 * 인텔리제이 http 테스트 설정 파일
 
+## 추가, 수정 내역
+### reservation 조건 검색시 인덱스 추가
+* 문제 : 기존 외래키로 reservation 테이블에서 users, charge 테이블을 참조했는데
+외래키 삭제 후 인덱스 없이 검색시 테이블 풀스캔하여 오래걸리는 상황 발생.
+실행계획 조회시 reservation 에서 user_id all type 으로 테이블 풀스캔
+* 해결 방안 : reservation 테이블에 user_idx 컬럼에 인덱스 추가
+* 결과 : user_idx 인덱스 없이 조회시 0.4초, 인덱스 추가 후 0.05초 -> 8배 빨라짐.
+charge_id 도 마찬가지로 인덱스 추가
+
 ### docker run jenkins
 ```shell
 docker run -itd --name gascharge-jenkins-server -p 8080:8080 -v /Users/taemin/docker/jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v /Users/taemin/.m2/repository:/root/.m2/repository -e TZ=Asia/Seoul -u root jenkins/jenkins:jdk17
@@ -25,7 +34,7 @@ docker run -itd --name gascharge-jenkins-server -p 8080:8080 -v /Users/taemin/do
 
 ### docker run mysql
 ```shell
-docker run --name mysql-local -e MYSQL_ROOT_PASSWORD=1212 -d -p 13307:3306 mysql:8.0.32
+docker run --name mysql-local --cap-add=sys_nice --privileged -e MYSQL_ROOT_PASSWORD=1212 -d -p 13307:3306 -it --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw -v /Volumes/taemin_hhd/mysql:/var/lib/mysql/ --user 1000 mysql:8.0.32
 ```
 
 ### docker run redis

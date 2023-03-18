@@ -28,6 +28,7 @@ def includeDomain(String moduleName) {
 
 includeApp 'reservation'
 includeApp 'batch'
+includeApp 'testdata'
 
 includeService 'reservation'
 includeService 'token'
@@ -41,3 +42,4 @@ includeModule 'security'
 includeModule 'yml'
 
 includeCommon 'common'
+
