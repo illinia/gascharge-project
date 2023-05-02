@@ -18,15 +18,6 @@ gascharge 멀티모듈 포트폴리오 최상위 프로젝트
 * 서브 프로젝트들 빌드, 로컬 메이븐 레포 배포, 공개 메이븐 레포 배포 테스트 테스크
 * 인텔리제이 http 테스트 설정 파일
 
-## 추가, 수정 내역
-### reservation 조건 검색시 인덱스 추가
-* 문제 : 기존 외래키로 reservation 테이블에서 users, charge 테이블을 참조했는데
-외래키 삭제 후 인덱스 없이 검색시 테이블 풀스캔하여 오래걸리는 상황 발생.
-실행계획 조회시 reservation 에서 user_id all type 으로 테이블 풀스캔
-* 해결 방안 : reservation 테이블에 user_idx 컬럼에 인덱스 추가
-* 결과 : user_idx 인덱스 없이 조회시 0.4초, 인덱스 추가 후 0.05초 -> 8배 빨라짐.
-charge_id 도 마찬가지로 인덱스 추가
-
 ### docker run jenkins
 ```shell
 docker run -itd --name gascharge-jenkins-server -p 8080:8080 -v /Users/taemin/docker/jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v /Users/taemin/.m2/repository:/root/.m2/repository -e TZ=Asia/Seoul -u root jenkins/jenkins:jdk17
@@ -135,14 +126,16 @@ ___
    1. 배포 스크립트에서 프로젝트 디렉토리명을 잘못 입력해서 생겼던 문제
 6. ec2 가 계속 멈추던 문제 해결
    1. 렘 용량 디스크 스왑 증가로 해결
-   2. sudo dd if=/dev/zero of=/swapfile bs=128M count=16
-   3. sudo chmod 600 /swapfile
-   4. sudo mkswap /swapfile
-   5. sudo swapon /swapfile
-   6. sudo swapon -s
-   7. sudo vi /etc/fstab
-      1. /swapfile swap swap defaults 0 0 입력
-   8. free
+```shell
+   sudo dd if=/dev/zero of=/swapfile bs=128M count=16
+   sudo chmod 600 /swapfile
+   sudo mkswap /swapfile
+   sudo swapon /swapfile
+   sudo swapon -s
+   sudo vi /etc/fstab
+#   /swapfile swap swap defaults 0 0 입력
+   free
+```
 ___
 #### 0.1.2 업데이트 예정
 1. 네이버 로그인 연동
