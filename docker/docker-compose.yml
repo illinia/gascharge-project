@@ -1,0 +1,78 @@
+version: '0.1'
+services:
+  mysql:
+    image: mysql:8.0.32
+    ports:
+      - "13307:3306"
+    cap_add:
+      - sys_nice
+    privileged: true
+    environment:
+      MYSQL_ROOT_PASSWORD: "1212"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - /Volumes/taemin_hhd/mysql:/var/lib/mysql
+    user: "1000"
+    networks:
+      gascharge:
+        aliases:
+          - "database"
+
+  jenkins-server:
+    image: jenkins/jenkins:jdk17
+    ports:
+      - "8080:8080"
+    volumes:
+      - /Users/taemin/docker/jenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /Users/taemin/.m2/repository:/root/.m2/repository
+    environment:
+      TZ: "Asia/Seoul"
+    user: root
+    networks:
+      gascharge:
+        aliases:
+          - "cicd-server"
+
+  redis-server:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      gascharge:
+        aliases:
+          - "cache-server"
+
+  config-server:
+    image: gascharge-app-configserver
+    ports:
+      - "8071:8071"
+    depends_on:
+      mysql:
+        condition: service_started
+      redis-server:
+        condition: service_started
+    networks:
+      gascharge:
+        aliases:
+          - "configserver"
+
+  reservation-server:
+    image: gascharge-app-reservation
+    ports:
+      - "8300:8300"
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    depends_on:
+      config-server:
+        condition: service_started
+
+
+
+
+
+
+networks:
+  gascharge:
+    driver: bridge
